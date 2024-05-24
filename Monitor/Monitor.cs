@@ -5,6 +5,7 @@
             var processChecker = new ProcessChecker();
 
             Timer timer = new(processChecker.CheckProcess, processChecker, 0, 10000);
+            Console.WriteLine("Hello World");
         }
     }
 
