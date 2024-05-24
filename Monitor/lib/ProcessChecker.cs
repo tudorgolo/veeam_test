@@ -1,22 +1,28 @@
 using System.Diagnostics;
 
-namespace App
+namespace Monitor
 {
     class ProcessChecker
     {
-        private int maxAge;
-        public ProcessChecker(int mAge)
+        protected string processName;
+        protected int maxAge;
+        public ProcessChecker(string pName, int mAge)
         {
-            if (mAge <= 0)
-            {
-                throw new ArgumentOutOfRangeException("Age needs to be > 0");
-            }
+            processName = pName;
             maxAge = mAge;
         }
 
         public void CheckProcess()
         {
-            var allProcesses = Process.GetProcessesByName("ping");
+            var allProcesses = Process.GetProcessesByName(processName);
+
+            if (allProcesses.Length == 0)
+            {
+                Console.WriteLine("No process found that matches search criteria");
+                return;
+            }
+
+            Console.WriteLine($"Found {allProcesses.Length} processes matching the search criteria.");
 
             foreach (var process in allProcesses)
             {
