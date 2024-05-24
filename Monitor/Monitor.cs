@@ -1,23 +1,35 @@
-﻿namespace App {
-    public class Monitor
+﻿namespace App
+{
+    public class ProcessMonitor
     {
-        static void Main() {
-            var processChecker = new ProcessChecker();
+        static void Main()
+        {
+            Task task = Task.Factory.StartNew(KeyPressedMonitorWorker);
 
-            Timer timer = new(processChecker.CheckProcess, processChecker, 0, 10000);
-            Console.WriteLine("Hello World");
+            int timeout = 5;
+
+            var processChecker = new ProcessChecker(1);
+            while (true)
+            {
+                processChecker.CheckProcess();
+                Console.WriteLine($"Sleeping for {timeout} minutes.");
+                Thread.Sleep(timeout * 10000);
+            }
         }
-    }
 
-    class ProcessChecker {
-        public void CheckProcess(Object? autoEvent) {
-            // var names = new[] { "Ana", "Felipe", "Emillia" };
-            // foreach(var name in names) 
-            // {
-            //     Console.WriteLine($"Hello {name}");
-            // }
-            Console.WriteLine("Hello World");
-
+        static void KeyPressedMonitorWorker()
+        {
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    if (Console.ReadKey(true).Key == ConsoleKey.Q)
+                    {
+                        Console.WriteLine("Received CLOSE command. Exiting...");
+                        Environment.Exit(1);
+                    }
+                }
+            }
         }
     }
 }
